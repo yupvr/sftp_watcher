@@ -1,0 +1,18 @@
+version: '3'
+services:
+  # Create SFTP server
+  sftp:
+    image: atmoz/sftp
+    volumes:
+      - ${UPLOAD_DIR}:/home/impraise/upload
+    ports:
+      - "2222:22"
+    command: impraise:impraise:1001
+  # Create watcher server
+  watcher:
+    build: .
+    image: sftp_watcher
+    volumes:
+      - ${UPLOAD_DIR}:/home/monitor
+    environment:
+      UPLOAD_DIR: ${UPLOAD_DIR}
